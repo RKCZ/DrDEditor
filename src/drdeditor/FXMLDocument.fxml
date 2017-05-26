@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TreeItem?>
+<?import model.Group?>
+<?import model.TreeDisplayCellFactory?>
+
+<BorderPane fx:id="pane"  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="drdeditor.FXMLDocumentController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="true" text="_File">
+            <items>
+                  <MenuItem fx:id="newCharacterMI" onAction="#addCharacter" text="_New Character" />
+                  <MenuItem fx:id="newGroupMI" onAction="#addGroup" text="Ne_w Group" />
+                  <MenuItem fx:id="saveMI" onAction="#save" text="_Save" />
+                  <MenuItem fx:id="loadMI" onAction="#load" text="_Load" />
+                  <MenuItem fx:id="closeMI" onAction="#exit" text="Clo_se" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="true" text="E_dit" />
+          <Menu mnemonicParsing="true" text="Hel_p">
+            <items>
+              <MenuItem fx:id="guideMI" onAction="#showGuide" text="Gu_ide" />
+              <MenuItem fx:id="aboutMI" onAction="#showAbout" text="Ab_out" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <TreeView fx:id="charInspectorTV" maxWidth="200.0" prefWidth="200.0" showRoot="false" BorderPane.alignment="CENTER">
+          <root>
+              <TreeItem expanded="true">
+                  <value>
+                      <Group fx:id="treeRoot" />
+                  </value>
+              </TreeItem>
+          </root>
+          <cellFactory>
+              <TreeDisplayCellFactory />
+          </cellFactory>
+      </TreeView>
+   </left>
+</BorderPane>
