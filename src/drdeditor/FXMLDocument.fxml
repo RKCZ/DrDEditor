@@ -22,7 +22,10 @@
                         <MenuItem fx:id="closeMI" onAction="#exit" text="Clo_se" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="true" text="E_dit" />
+                <Menu mnemonicParsing="true" text="E_dit">
+                    <MenuItem onAction="#deleteSelection" text="_Delete selection" />
+                    <MenuItem onAction="#renameSelection" text="_Rename selection" />
+                </Menu>
                 <Menu mnemonicParsing="true" text="Hel_p">
                     <items>
                         <MenuItem fx:id="guideMI" onAction="#showGuide" text="Gu_ide" />

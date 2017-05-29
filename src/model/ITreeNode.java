@@ -8,5 +8,6 @@ package model;
 public interface ITreeNode {
 
     public String getName();
+    public void setName(String name);
 
 }

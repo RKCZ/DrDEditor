@@ -97,14 +97,6 @@ public class TabsController {
     @FXML
     private TabPane tabs;
 
-    @FXML
-    private void changeName() {
-        if (nameTF.getText().length() != 0) {
-            character.setName(nameTF.getText());
-        }
-        nameTF.setText(character.getName());
-    }
-
     private <T> void commitEditorText(Spinner<T> spinner) {
         if (!spinner.isEditable()) {
             return;
@@ -137,11 +129,6 @@ public class TabsController {
         assert treasureLV != null : "fx:id=\"treasureLV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
 
         initializeTabs();
-
-        nameTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            changeName();
-            System.out.println("changed " + oldValue + " to " + character.getName());
-        });
 
         raceCB.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Race> observable, Race oldValue, Race newValue) -> {
             character.setRace(newValue);

@@ -11,11 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
@@ -64,6 +66,67 @@ public class FXMLDocumentController {
     BorderPane pane;
 
     @FXML
+    void deleteSelection(ActionEvent event) {
+        TreeItem<ITreeNode> selected = charInspectorTV.getSelectionModel()
+                .getSelectedItem();
+        if (selected != null) {
+            if (selected.getParent() == charInspectorTV.getRoot()) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Deleting");
+                alert.setHeaderText("Do you really want to delete " + selected.getValue().getName() + " and all heroes within?");
+                alert.showAndWait()
+                        .filter(response -> response == ButtonType.OK)
+                        .ifPresent(response -> {
+                            charInspectorTV.getRoot().getChildren().remove(selected);
+                        });
+            } else {
+                TreeItem<ITreeNode> group = selected.getParent();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Deleting");
+                alert.setHeaderText("Do you really want to delete " + selected.getValue().getName() + "?");
+                alert.showAndWait()
+                        .filter(response -> response == ButtonType.OK)
+                        .ifPresent(response -> {
+                            group.getChildren().remove(selected);
+                        });
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Error");
+            alert.setHeaderText("Nothing selected!");
+            alert.setContentText("Please select which hero you want to kill first");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void renameSelection(ActionEvent event) {
+        TreeItem<ITreeNode> selected = charInspectorTV.getSelectionModel()
+                .getSelectedItem();
+        if (selected != null) {
+            Optional<String> name = Optional.empty();
+            boolean collision = false;
+            do {
+                TextInputDialog tid = new TextInputDialog("new Name");
+                tid.setTitle("Choose new name");
+                tid.setContentText(collision
+                        ? ("This name is already taken, please choose another name")
+                        : ("Please choose new name"));
+                name = tid.showAndWait();
+                collision = true;
+            } while (nameCollides(selected.getParent().getChildren(), name.get()));
+            selected.getValue().setName(name.get());
+            ctrl.updateView();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Error");
+            alert.setHeaderText("Nothing selected!");
+            alert.setContentText("Please select which hero or group you want to rename first");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
     void addCharacter(ActionEvent event) {
         TreeItem<ITreeNode> selectedGroup = charInspectorTV.getSelectionModel()
                 .getSelectedItem();
@@ -73,7 +136,18 @@ public class FXMLDocumentController {
             }
             selectedGroup.setExpanded(true);
             GameCharacter newCharacter = new GameCharacter();
-            newCharacter.setName("new Character");
+            Optional<String> name = Optional.empty();
+            boolean collision = false;
+            do {
+                TextInputDialog tid = new TextInputDialog("new Character");
+                tid.setTitle("Choose character name");
+                tid.setContentText(collision
+                        ? ("This name is already taken, please choose another name")
+                        : ("Please choose name of the character"));
+                name = tid.showAndWait();
+                collision = true;   //pri dalsim pruchodu cyklem se zmeni text v dialogu
+            } while (nameCollides(selectedGroup.getChildren(), name.get()));
+            newCharacter.setName(name.get());
             TreeItem<ITreeNode> item = new TreeItem<>(newCharacter);
             newCharacter.nameProperty().addListener(((observable, oldValue, newValue) -> {
                 TreeModificationEvent<ITreeNode> treeEvent = new TreeItem.TreeModificationEvent<>(TreeItem.valueChangedEvent(), item);
@@ -93,14 +167,27 @@ public class FXMLDocumentController {
     @FXML
     void addGroup(ActionEvent event) {
         Group newGroup = new Group();
-        TextInputDialog tid = new TextInputDialog("new Group");
-        tid.setTitle("Choose group name");
-        tid.setContentText("Please choose name of the group");
-        Optional<String> name = tid.showAndWait();
+        Optional<String> name = Optional.empty();
+        boolean collision = false;
+        do {
+            TextInputDialog tid = new TextInputDialog("new Group");
+            tid.setTitle("Choose group name");
+            tid.setContentText(collision
+                    ? ("This name is already taken, please choose another name")
+                    : ("Please choose name of the group"));
+            name = tid.showAndWait();
+            collision = true;
+        } while (nameCollides(charInspectorTV.getRoot().getChildren(), name.get()));
         newGroup.setName(name.get());
         TreeItem<ITreeNode> node = new TreeItem<>(newGroup);
         charInspectorTV.getRoot().getChildren().add(node);
         charInspectorTV.getSelectionModel().select(node);
+    }
+
+    private boolean nameCollides(ObservableList<TreeItem<ITreeNode>> children, String newName) {
+        return children.stream()
+                .map(item -> (item.getValue()).getName())
+                .anyMatch(value -> value.equalsIgnoreCase(newName));
     }
 
     @FXML
@@ -110,14 +197,48 @@ public class FXMLDocumentController {
 
     @FXML
     void load(ActionEvent event) {
+        if (!charInspectorTV.getRoot().getChildren().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Possible data loss");
+            alert.setHeaderText("Current state might contain unsaved data");
+            alert.setContentText("Do you want to save your data now?");
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.YES) {
+                save(event);
+            } else if (result.get() == ButtonType.NO) {
+                loadData();
+            }
+        } else {
+            loadData();
+        }
+    }
+
+    private void loadData() {
         TreeItem<ITreeNode> root = fh.readData();
-        charInspectorTV.setRoot(root);
-        charInspectorTV.getSelectionModel().clearSelection();
+        if (root != null) {
+            charInspectorTV.setRoot(root);
+            charInspectorTV.getSelectionModel().clearSelection();
+        }
     }
 
     @FXML
     void exit(ActionEvent event) {
-        Platform.exit();
+        if (!charInspectorTV.getRoot().getChildren().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Possible data loss");
+            alert.setHeaderText("Current state might contain unsaved data");
+            alert.setContentText("Do you want to save your data now?");
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.YES) {
+                save(event);
+            } else if (result.get() == ButtonType.NO) {
+                Platform.exit();
+            }
+        } else {
+            Platform.exit();
+        }
     }
 
     @FXML

@@ -62,13 +62,14 @@ public class FileHandler {
             FileChooser fc = new FileChooser();
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("DrD file", "*.DrD"));
             fc.setInitialFileName(data.getValue().getName());
-            fos = new FileOutputStream(fc.showSaveDialog(window));
+            final File saveFile = fc.showSaveDialog(window);
+            fos = new FileOutputStream(saveFile);
             ZipOutputStream zos = new ZipOutputStream(fos);
             zos.setLevel(ZipOutputStream.STORED);
             data.getChildren().stream()
                     .forEach((item) -> {
                         try {
-                            zos.putNextEntry(new ZipEntry(item.getValue().getName()+"/"));
+                            zos.putNextEntry(new ZipEntry(item.getValue().getName() + "/"));
                             zos.closeEntry();
                         } catch (IOException ex) {
                             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,13 +81,6 @@ public class FileHandler {
                                         byte[] entry = saveCharacter((GameCharacter) c.getValue());
                                         zos.write(entry, 0, entry.length);
                                         zos.closeEntry();
-                                    } catch (FileNotFoundException ex) {
-                                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                                        alert.setTitle("File error");
-                                        alert.setHeaderText("Data were not saved!");
-                                        alert.setContentText("Error occurred while saving this project " + data.getValue().getName() + ". Please try again.");
-                                        alert.show();
-                                        Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
                                     } catch (IOException ex) {
                                         Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -98,6 +92,8 @@ public class FileHandler {
             alert.setHeaderText("Character was not saved!");
             alert.show();
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
+            System.out.println("data writing operation cancelled");
         } finally {
             try {
                 fos.close();
@@ -126,34 +122,27 @@ public class FileHandler {
                 System.out.println(entry.getName());
                 if (entry.isDirectory()) {
                     Group group = new Group();
-                    group.setName(entry.getName().substring(0, entry.getName().length()-1));
+                    group.setName(entry.getName().substring(0, entry.getName().length() - 1));
                     groupItem = new TreeItem<>(group);
                     data.getChildren().add(groupItem);
                 } else {
                     final char[] buffer = new char[BUFFER_SIZE];
                     final InputStreamReader isr = new InputStreamReader(zis);
                     final StringBuilder sb = new StringBuilder();
-                    int read = 0;
-                    while ((read = isr.read(buffer, 0, buffer.length)) >= 0) {                        
+                    int read;
+                    while ((read = isr.read(buffer, 0, buffer.length)) >= 0) {
                         sb.append(new String(buffer, 0, read));
                     }
                     GameCharacter c = readCharacter(sb.toString());
                     TreeItem<ITreeNode> item = new TreeItem<>(c);
                     c.nameProperty().addListener(((observable, oldValue, newValue) -> {
-                    TreeModificationEvent<ITreeNode> treeEvent = new TreeItem.TreeModificationEvent<>(TreeItem.valueChangedEvent(), item);
-                    Event.fireEvent(item, treeEvent);
+                        TreeModificationEvent<ITreeNode> treeEvent = new TreeItem.TreeModificationEvent<>(TreeItem.valueChangedEvent(), item);
+                        Event.fireEvent(item, treeEvent);
                     }));
                     groupItem.getChildren().add(item);
                 }
                 zis.closeEntry();
             }
-        } catch (FileNotFoundException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("File error");
-            alert.setHeaderText("Data were not loaded!");
-            alert.setContentText("Error occurred while reading.");
-            alert.show();
-            Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("File error");
@@ -161,6 +150,8 @@ public class FileHandler {
             alert.setContentText("Error occurred while reading.");
             alert.show();
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
+            System.out.println("data reading operation cancelled");
         } finally {
             try {
                 fis.close();

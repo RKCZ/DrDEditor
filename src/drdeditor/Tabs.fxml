@@ -38,7 +38,7 @@
                         <Label prefHeight="21.0" prefWidth="49.0" text="Name" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
                         <Label text="Race" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
                         <Label text="Class" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                        <TextField fx:id="nameTF" editable="false" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+                        <TextField fx:id="nameTF" editable="false" disable="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
                         <Label text="MaxMag" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" />
                         <Label text="MaxHP" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" />
                         <ChoiceBox fx:id="raceCB" prefWidth="150.0" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" >
