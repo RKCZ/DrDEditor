@@ -10,30 +10,26 @@ public enum Occupation {
      *
      */
     WARRIOR,
-    
     /**
      *
      */
     RANGER,
-    
     /**
      *
      */
-    ALCHEMIST, 
-    
+    ALCHEMIST,
     /**
      *
      */
     SORCERER,
-    
     /**
      *
      */
     THIEF;
-    
-    @Override    
+
+    @Override
     public String toString() {
-        switch(this) {
+        switch (this) {
             case WARRIOR:
                 return "Warrior";
             case RANGER:

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  * @author Roman Kalivoda
  */
 public class DrdEditor extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/FXMLDocument.fxml"));
@@ -19,7 +19,7 @@ public class DrdEditor extends Application {
         FXMLDocumentController controller = (FXMLDocumentController) loader.getController();
         controller.setWindow(stage);
         Scene scene = new Scene(root);
-        
+
         stage.setMinHeight(600);
         stage.setMinWidth(800);
         stage.setTitle("DrD Editor");
@@ -33,5 +33,5 @@ public class DrdEditor extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

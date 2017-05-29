@@ -1,8 +1,8 @@
 package drdeditor;
+
 /**
  * Sample Skeleton for 'FXMLDocument.fxml' Controller Class
  */
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -30,7 +30,7 @@ import model.Group;
 import model.ITreeNode;
 
 public class FXMLDocumentController {
-    
+
     private Window window;
     private TabsController ctrl;
     private TabPane tabs;
@@ -44,7 +44,7 @@ public class FXMLDocumentController {
 
     @FXML // fx:id="newCharacterMI"
     private MenuItem newCharacterMI; // Value injected by FXMLLoader
-    
+
     @FXML //fx:id="newGroupMI"
     private MenuItem newGroupMI;
 
@@ -62,9 +62,6 @@ public class FXMLDocumentController {
 
     @FXML
     BorderPane pane;
-    
-    @FXML
-    Group treeRoot;    
 
     @FXML
     void addCharacter(ActionEvent event) {
@@ -73,7 +70,7 @@ public class FXMLDocumentController {
         if (selectedGroup != null) {
             if (selectedGroup.getParent() != charInspectorTV.getRoot()) {
                 selectedGroup = selectedGroup.getParent(); //pridani novveho uzlu pod skupinu
-            } 
+            }
             selectedGroup.setExpanded(true);
             GameCharacter newCharacter = new GameCharacter();
             newCharacter.setName("new Character");
@@ -90,9 +87,9 @@ public class FXMLDocumentController {
             alert.setHeaderText("No Group selected!");
             alert.setContentText("Please select group to which new Character can be added");
             alert.showAndWait();
-        }   
+        }
     }
-    
+
     @FXML
     void addGroup(ActionEvent event) {
         Group newGroup = new Group();
@@ -101,47 +98,23 @@ public class FXMLDocumentController {
         tid.setContentText("Please choose name of the group");
         Optional<String> name = tid.showAndWait();
         newGroup.setName(name.get());
-        charInspectorTV.getRoot().setExpanded(true);
         TreeItem<ITreeNode> node = new TreeItem<>(newGroup);
         charInspectorTV.getRoot().getChildren().add(node);
         charInspectorTV.getSelectionModel().select(node);
     }
-    
+
     @FXML
     void save(ActionEvent event) {
-        ITreeNode selected = charInspectorTV.getSelectionModel().getSelectedItem().getValue();
-        if(selected instanceof GameCharacter) {
-        fh.saveCharacter((GameCharacter)selected);
-        }
+        fh.saveData(charInspectorTV.getRoot());
     }
-        
 
     @FXML
     void load(ActionEvent event) {
-         TreeItem<ITreeNode> selectedGroup = charInspectorTV.getSelectionModel()
-                .getSelectedItem();
-        if (selectedGroup != null) {
-            if (selectedGroup.getParent() != charInspectorTV.getRoot()) {
-                selectedGroup = selectedGroup.getParent(); //pridani novveho uzlu pod skupinu
-            } 
-            selectedGroup.setExpanded(true);
-            GameCharacter newCharacter = fh.readCharacter();
-            TreeItem<ITreeNode> item = new TreeItem<>(newCharacter);
-            newCharacter.nameProperty().addListener(((observable, oldValue, newValue) -> {
-                TreeModificationEvent<ITreeNode> treeEvent = new TreeItem.TreeModificationEvent<>(TreeItem.valueChangedEvent(), item);
-                Event.fireEvent(item, treeEvent);
-            }));
-            selectedGroup.getChildren().add(item);
-            charInspectorTV.getSelectionModel().select(item);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Selection Error");
-            alert.setHeaderText("No Group selected!");
-            alert.setContentText("Please select group to which new Character can be added");
-            alert.showAndWait();
-        } 
+        TreeItem<ITreeNode> root = fh.readData();
+        charInspectorTV.setRoot(root);
+        charInspectorTV.getSelectionModel().clearSelection();
     }
-    
+
     @FXML
     void exit(ActionEvent event) {
         Platform.exit();
@@ -167,40 +140,44 @@ public class FXMLDocumentController {
         assert closeMI != null : "fx:id=\"closeMI\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert guideMI != null : "fx:id=\"guideMI\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert aboutMI != null : "fx:id=\"aboutMI\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
-        assert charInspectorTV != null : "fx:id=\"charInspectorTV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";    
-       
+        assert charInspectorTV != null : "fx:id=\"charInspectorTV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
+
+        Group treeRoot = new Group();
         treeRoot.setName("DrDEditor Data");
-        
+        charInspectorTV.setRoot(new TreeItem<>(treeRoot));
+        charInspectorTV.getRoot().setExpanded(true);
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Tabs.fxml"));
-            tabs = (TabPane) loader.load(); 
-            ctrl = loader.getController();                     
+            tabs = (TabPane) loader.load();
+            ctrl = loader.getController();
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       charInspectorTV.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends TreeItem<ITreeNode>> change) -> {
+        charInspectorTV.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends TreeItem<ITreeNode>> change) -> {
             updateCenter();
         });
-       pane.setCenter(new Label("Nothing here.\nPlease create your first group of characters from FILE-New Group."));            
+        updateCenter();
     }
-    
-    
+
     private void updateCenter() {
         TreeItem<ITreeNode> selected = charInspectorTV.getSelectionModel().getSelectedItem();
-        if(selected.getParent() == charInspectorTV.getRoot()) {
-            pane.setCenter(new Label("Nothing here.\nPlease select character from list on left side\nor create new one from FILE-New Character."));
-        } else{            
-            pane.setCenter(tabs); 
-            ctrl.setCharacter((GameCharacter) selected.getValue());
-            ctrl.updateView();
+        if (selected == null) {
+            pane.setCenter(new Label("Nothing here.\nPlease select group from list on left side\nor create your new group of characters from FILE-New Group."));
+        } else {
+            if (selected.getParent() == charInspectorTV.getRoot()) {
+                pane.setCenter(new Label("Nothing here.\nPlease select character from list on left side\nor create new one from FILE-New Character."));
+            } else {
+                pane.setCenter(tabs);
+                ctrl.setCharacter((GameCharacter) selected.getValue());
+                ctrl.updateView();
+            }
+            System.out.println(selected.getValue().toString());
         }
-        System.out.println(selected.getValue().toString());
-    }   
+    }
 
     public void setWindow(Window window) {
         this.window = window;
     }
-    
-    
+
 }

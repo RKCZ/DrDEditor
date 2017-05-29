@@ -16,7 +16,7 @@ import javafx.collections.ObservableList;
  * @author Roman Kalivoda
  * @version 1.0
  */
-public class GameCharacter implements ITreeNode{
+public class GameCharacter implements ITreeNode {
 
     private final ObjectProperty<Race> race = new SimpleObjectProperty<>();
     private final ObjectProperty<Occupation> occupation = new SimpleObjectProperty<>();
@@ -26,12 +26,10 @@ public class GameCharacter implements ITreeNode{
     private final ListProperty<Attribute> attributes = new SimpleListProperty<>(FXCollections.observableArrayList());
     private final IntegerProperty armor = new SimpleIntegerProperty();
 
-    
-
     public GameCharacter() {
         initializeAttributes();
     }
-    
+
     public int getArmor() {
         return armor.get();
     }
@@ -43,7 +41,7 @@ public class GameCharacter implements ITreeNode{
     public IntegerProperty armorProperty() {
         return armor;
     }
-    
+
     public Race getRace() {
         return race.get();
     }
@@ -54,7 +52,7 @@ public class GameCharacter implements ITreeNode{
 
     public ObjectProperty raceProperty() {
         return race;
-    }    
+    }
 
     public Occupation getOccupation() {
         return occupation.get();
@@ -66,7 +64,7 @@ public class GameCharacter implements ITreeNode{
 
     public ObjectProperty occupationProperty() {
         return occupation;
-    }    
+    }
 
     @Override
     public String getName() {
@@ -130,7 +128,7 @@ public class GameCharacter implements ITreeNode{
         charisma.setName("charisma");
         getAttributes().addAll(strength, dexterity, resistance, intelligence, charisma);
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(100);
@@ -142,7 +140,7 @@ public class GameCharacter implements ITreeNode{
         sb.append("\nArmor: ").append(getArmor());
         sb.append("\nAttributes<");
         attributes.forEach((next) -> {
-            sb.append(next.getName()).append("(").append(next.getLevel()).append(", ").append(next.getCorrection()).append("), ");
+            sb.append(next.getName()).append("(").append(next.getLevel()).append("), ");
         });
         sb.append(">");
         return sb.toString();

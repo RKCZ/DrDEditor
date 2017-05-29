@@ -10,40 +10,34 @@ public enum Race {
      *
      */
     HUMAN,
-
     /**
      *
      */
     ELF,
-
     /**
      *
      */
     DWARF,
-
     /**
      *
      */
     KUDUK,
-
     /**
      *
      */
     HOBBIT,
-
     /**
      *
      */
     BARBAR,
-
     /**
      *
      */
     KROLL;
-    
-    @Override    
+
+    @Override
     public String toString() {
-        switch(this) {
+        switch (this) {
             case HUMAN:
                 return "Human";
             case ELF:

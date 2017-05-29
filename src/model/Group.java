@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 public class Group implements ITreeNode{
 
     private final StringProperty name = new SimpleStringProperty();
-    private final ListProperty<GameCharacter> group = new SimpleListProperty<>();
+    
 
     @Override
     public String getName() {
@@ -27,26 +27,11 @@ public class Group implements ITreeNode{
     public StringProperty nameProperty() {
         return name;
     }
-
-    public ObservableList getGroup() {
-        return group.get();
-    }
-
-    public void setGroup(ObservableList value) {
-        group.set(value);
-    }
-
-    public ListProperty groupProperty() {
-        return group;
-    }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Name: ").append(getName());
-        group.forEach(next -> {
-            sb.append(next.getName() + "\n");
-        });
         return sb.toString();
     }    
 }

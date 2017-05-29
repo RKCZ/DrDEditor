@@ -13,20 +13,6 @@ public class Attribute {
 
     private final StringProperty name = new SimpleStringProperty();
     private final IntegerProperty level = new SimpleIntegerProperty();
-    private final IntegerProperty correction = new SimpleIntegerProperty();
-
-    public int getCorrection() {
-        return correction.get();
-    }
-
-    public void setCorrection(int value) {
-        correction.set(value);
-    }
-
-    public IntegerProperty correctionProperty() {
-        return correction;
-    }
-    
 
     public int getLevel() {
         return level.get();
@@ -39,7 +25,6 @@ public class Attribute {
     public IntegerProperty levelProperty() {
         return level;
     }
-    
 
     public String getName() {
         return name.get();
