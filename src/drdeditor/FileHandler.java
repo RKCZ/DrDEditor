@@ -2,7 +2,6 @@ package drdeditor;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -88,12 +87,12 @@ public class FileHandler {
                     });
         } catch (FileNotFoundException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("File error");
-            alert.setHeaderText("Character was not saved!");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("FILE ERROR"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHARACTER WAS NOT SAVED!"));
             alert.show();
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
-            System.out.println("data writing operation cancelled");
+            System.out.println(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA WRITING OPERATION CANCELLED"));
         } finally {
             try {
                 fos.close();
@@ -145,13 +144,13 @@ public class FileHandler {
             }
         } catch (IOException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("File error");
-            alert.setHeaderText("Data were not loaded!");
-            alert.setContentText("Error occurred while reading.");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("FILE ERROR"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA WERE NOT LOADED!"));
+            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ERROR OCCURRED WHILE READING."));
             alert.show();
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
-            System.out.println("data reading operation cancelled");
+            System.out.println(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA READING OPERATION CANCELLED"));
         } finally {
             try {
                 fis.close();

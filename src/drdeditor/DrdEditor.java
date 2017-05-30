@@ -1,13 +1,12 @@
 package drdeditor;
 
-import java.util.Optional;
+import drdeditor.controller.MainController;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
@@ -18,9 +17,9 @@ public class DrdEditor extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/FXMLDocument.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/Main.fxml"), ResourceBundle.getBundle("drdeditor/Bundle", Locale.getDefault()));
         Parent root = (Parent) loader.load();
-        controller = (FXMLDocumentController) loader.getController();
+        controller = (MainController) loader.getController();
         controller.setWindow(stage);
         Scene scene = new Scene(root);
 
@@ -34,7 +33,7 @@ public class DrdEditor extends Application {
                 });
         stage.show();
     }
-    private FXMLDocumentController controller;
+    private MainController controller;
     
     /**
      * @param args the command line arguments

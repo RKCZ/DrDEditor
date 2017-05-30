@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TreeItem?>
+<?import model.Group?>
+<?import model.TreeDisplayCellFactory?>
+
+<BorderPane fx:id="pane"  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="drdeditor.controller.MainController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="true" text="%FILE">
+                    <items>
+                        <MenuItem onAction="#addCharacter" text="%NEW CHARACTER" />
+                        <MenuItem onAction="#addGroup" text="%NEW GROUP" />
+                        <MenuItem onAction="#save" text="%SAVE" />
+                        <MenuItem onAction="#load" text="%OPEN" />
+                        <MenuItem onAction="#exit" text="%CLOSE" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="true" text="%EDIT">
+                    <MenuItem onAction="#deleteSelection" text="%Delete sele_ction" />
+                    <MenuItem onAction="#renameSelection" text="%_Rename selection" />
+                    <Menu text="_Language" disable="true">
+                        <fx:define>
+                            <ToggleGroup fx:id="languageTG" />
+                        </fx:define>
+                        <RadioMenuItem fx:id="czRMI" text="%C_zech" onAction="#changeLanguage" toggleGroup="$languageTG" />
+                        <RadioMenuItem text="%En_glish" onAction="#changeLanguage" toggleGroup="$languageTG" />
+                    </Menu>
+                </Menu>
+                <Menu mnemonicParsing="true" text="%Hel_p">
+                    <items>
+                        <MenuItem fx:id="guideMI" onAction="#showGuide" text="%GUIDE" />
+                        <MenuItem fx:id="aboutMI" onAction="#showAbout" text="%_About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <left>
+        <TreeView fx:id="charInspectorTV" maxWidth="200.0" prefWidth="200.0" showRoot="false" BorderPane.alignment="CENTER">
+            <cellFactory>
+                <TreeDisplayCellFactory />
+            </cellFactory>
+        </TreeView>
+    </left>
+</BorderPane>

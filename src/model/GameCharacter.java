@@ -44,11 +44,11 @@ public class GameCharacter implements ITreeNode {
         return notes;
     }
 
-    public ObservableList getRangedWeapons() {
+    public ObservableList<RangedAttribute> getRangedWeapons() {
         return rangedWeapons.get();
     }
 
-    public void setRangedWeapons(ObservableList value) {
+    public void setRangedWeapons(ObservableList<RangedAttribute> value) {
         rangedWeapons.set(value);
     }
 
@@ -56,11 +56,11 @@ public class GameCharacter implements ITreeNode {
         return rangedWeapons;
     }
 
-    public ObservableList getMeleeWeapons() {
+    public ObservableList<MeleeAttribute> getMeleeWeapons() {
         return meleeWeapons.get();
     }
 
-    public void setMeleeWeapons(ObservableList value) {
+    public void setMeleeWeapons(ObservableList<MeleeAttribute> value) {
         meleeWeapons.set(value);
     }
 
@@ -68,11 +68,11 @@ public class GameCharacter implements ITreeNode {
         return meleeWeapons;
     }
 
-    public ObservableList getTreasure() {
+    public ObservableList<String> getTreasure() {
         return treasure.get();
     }
 
-    public void setTreasure(ObservableList value) {
+    public void setTreasure(ObservableList<String> value) {
         treasure.set(value);
     }
 
@@ -80,11 +80,11 @@ public class GameCharacter implements ITreeNode {
         return treasure;
     }
 
-    public ObservableList getEquipment() {
+    public ObservableList<String> getEquipment() {
         return equipment.get();
     }
 
-    public void setEquipment(ObservableList value) {
+    public void setEquipment(ObservableList<String> value) {
         equipment.set(value);
     }
 
@@ -92,11 +92,11 @@ public class GameCharacter implements ITreeNode {
         return equipment;
     }
     
-    public ObservableList getSpells() {
+    public ObservableList<String> getSpells() {
         return spells.get();
     }
 
-    public void setSpells(ObservableList value) {
+    public void setSpells(ObservableList<String> value) {
         spells.set(value);
     }
 
@@ -177,11 +177,11 @@ public class GameCharacter implements ITreeNode {
         return maxMag;
     }
 
-    public ObservableList getAttributes() {
+    public ObservableList<Attribute> getAttributes() {
         return attributes.get();
     }
 
-    public void setAttributes(ObservableList value) {
+    public void setAttributes(ObservableList<Attribute> value) {
         attributes.set(value);
     }
 
@@ -195,30 +195,18 @@ public class GameCharacter implements ITreeNode {
         Attribute dexterity = new Attribute();
         Attribute intelligence = new Attribute();
         Attribute charisma = new Attribute();
-        strength.setName("strength");
-        resistance.setName("resistance");
-        dexterity.setName("dexterity");
-        intelligence.setName("intelligence");
-        charisma.setName("charisma");
+        strength.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("STRENGTH"));
+        resistance.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("RESISTANCE"));
+        dexterity.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DEXTERITY"));
+        intelligence.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("INTELLIGENCE"));
+        charisma.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHARISMA"));
         getAttributes().addAll(strength, dexterity, resistance, intelligence, charisma);
-        
-        /*MeleeAttribute defWeapon = new MeleeAttribute();
-        defWeapon.setName("Default Melee Weapon");
-        getMeleeWeapons().add(defWeapon);
-        
-        RangedAttribute defRangedWeapon = new RangedAttribute();
-        defRangedWeapon.setName("Default Ranged Weapon");
-        getRangedWeapons().add(defRangedWeapon);
-        
-        getSpells().add("New Spell");
-        getEquipment().add("new Equipment");
-        getTreasure().add("new Treasure");*/
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(100);
-        sb.append("Name: ").append(getName());
+        sb.append(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NAME: ")).append(getName());
         sb.append("\nRace: ").append(getRace());
         sb.append("\nOccupation: ").append(getOccupation());
         sb.append("\nMaximal Mags: ").append(getMaxMag());

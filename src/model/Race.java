@@ -39,20 +39,20 @@ public enum Race {
     public String toString() {
         switch (this) {
             case HUMAN:
-                return "Human";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("HUMAN");
             case ELF:
-                return "Elf";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ELF");
             case DWARF:
-                return "Dwarf";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DWARF");
             case KUDUK:
-                return "Kuduk";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("KUDUK");
             case HOBBIT:
-                return "Hobbit";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("HOBBIT");
             case BARBAR:
-                return "Barbar";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("BARBAR");
             case KROLL:
-                return "Kroll";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("KROLL");
         }
-        return "Undefined";
+        return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("UNDEFINED");
     }
 }

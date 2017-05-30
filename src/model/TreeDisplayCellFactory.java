@@ -1,6 +1,5 @@
 package model;
 
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 

@@ -31,16 +31,16 @@ public enum Occupation {
     public String toString() {
         switch (this) {
             case WARRIOR:
-                return "Warrior";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("WARRIOR");
             case RANGER:
-                return "Ranger";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("RANGER");
             case SORCERER:
-                return "Sorcerer";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SORCERER");
             case ALCHEMIST:
-                return "Alchemist";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ALCHEMIST");
             case THIEF:
-                return "Thief";
+                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIEF");
         }
-        return "Undefined";
+        return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("UNDEFINED");
     }
 }

@@ -1,4 +1,4 @@
-package drdeditor;
+package drdeditor.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -140,20 +140,20 @@ public class TabsController {
 
     @FXML
     private void addSpell(ActionEvent event) {
-        spellLV.getItems().add("new Spell");
+        spellLV.getItems().add(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW SPELL"));
     }
 
     @FXML
     private void addMeleeWeapon(ActionEvent event) {
         final MeleeAttribute ma = new MeleeAttribute();
-        ma.setName("new Melee Weapon");
+        ma.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW MELEE WEAPON"));
         meleeTV.getItems().add(ma);
     }
 
     @FXML
     private void addRangedWeapon(ActionEvent event) {
         final RangedAttribute ra = new RangedAttribute();
-        ra.setName("new Ranged Weapon");
+        ra.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW RANGED WEAPON"));
         rangedTV.getItems().add(ra);
     }
 
@@ -177,24 +177,24 @@ public class TabsController {
 
     @FXML
     private void editNote(ActionEvent event) {
-        if (editNoteBT.getText().equals("Edit")) {
+        if (editNoteBT.getText().equals(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"))) {
             notesTA.setEditable(true);
-            editNoteBT.setText("Save");
+            editNoteBT.setText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SAVE"));
         } else {
             character.setNotes(notesTA.getText());
             notesTA.setEditable(false);
-            editNoteBT.setText("Edit");
+            editNoteBT.setText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"));
         }
     }
 
     @FXML
     private void addEquipment(ActionEvent event) {
-        equipmentLV.getItems().add("new Equipment");
+        equipmentLV.getItems().add(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW EQUIPMENT"));
     }
 
     @FXML
     private void addTreasure(ActionEvent event) {
-        treasureLV.getItems().add("new Treasure");
+        treasureLV.getItems().add(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW TREASURE"));
     }
 
     @FXML

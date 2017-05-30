@@ -1,10 +1,12 @@
-package drdeditor;
+package drdeditor.controller;
 
 /**
  * Sample Skeleton for 'FXMLDocument.fxml' Controller Class
  */
+import drdeditor.FileHandler;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,23 +18,29 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeItem.TreeModificationEvent;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.GameCharacter;
 import model.Group;
 import model.ITreeNode;
 
-public class FXMLDocumentController {
+public class MainController {
 
+    private Stage guide;
     private Window window;
     private TabsController ctrl;
     private TabPane tabs;
@@ -64,6 +72,12 @@ public class FXMLDocumentController {
 
     @FXML
     BorderPane pane;
+    
+    @FXML
+    ToggleGroup languageTG;
+    
+    @FXML
+    RadioMenuItem czRMI;
 
     @FXML
     void deleteSelection(ActionEvent event) {
@@ -72,8 +86,8 @@ public class FXMLDocumentController {
         if (selected != null) {
             if (selected.getParent() == charInspectorTV.getRoot()) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Deleting");
-                alert.setHeaderText("Do you really want to delete " + selected.getValue().getName() + " and all heroes within?");
+                alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DELETING"));
+                alert.setHeaderText(java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU REALLY WANT TO DELETE {0} AND ALL HEROES WITHIN?"), new Object[] {selected.getValue().getName()}));
                 alert.showAndWait()
                         .filter(response -> response == ButtonType.OK)
                         .ifPresent(response -> {
@@ -82,8 +96,8 @@ public class FXMLDocumentController {
             } else {
                 TreeItem<ITreeNode> group = selected.getParent();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Deleting");
-                alert.setHeaderText("Do you really want to delete " + selected.getValue().getName() + "?");
+                alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DELETING"));
+                alert.setHeaderText(java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU REALLY WANT TO DELETE {0}?"), new Object[] {selected.getValue().getName()}));
                 alert.showAndWait()
                         .filter(response -> response == ButtonType.OK)
                         .ifPresent(response -> {
@@ -92,9 +106,9 @@ public class FXMLDocumentController {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Selection Error");
-            alert.setHeaderText("Nothing selected!");
-            alert.setContentText("Please select which hero you want to kill first");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NOTHING SELECTED!"));
+            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT WHICH HERO YOU WANT TO KILL FIRST"));
             alert.showAndWait();
         }
     }
@@ -107,11 +121,11 @@ public class FXMLDocumentController {
             Optional<String> name = Optional.empty();
             boolean collision = false;
             do {
-                TextInputDialog tid = new TextInputDialog("new Name");
-                tid.setTitle("Choose new name");
+                TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW NAME"));
+                tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE NEW NAME"));
                 tid.setContentText(collision
-                        ? ("This name is already taken, please choose another name")
-                        : ("Please choose new name"));
+                        ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
+                        : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NEW NAME")));
                 name = tid.showAndWait();
                 collision = true;
             } while (nameCollides(selected.getParent().getChildren(), name));
@@ -119,9 +133,9 @@ public class FXMLDocumentController {
             ctrl.updateView();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Selection Error");
-            alert.setHeaderText("Nothing selected!");
-            alert.setContentText("Please select which hero or group you want to rename first");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NOTHING SELECTED!"));
+            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT WHICH HERO OR GROUP YOU WANT TO RENAME FIRST"));
             alert.showAndWait();
         }
     }
@@ -139,11 +153,11 @@ public class FXMLDocumentController {
             Optional<String> name = Optional.empty();
             boolean collision = false;
             do {
-                TextInputDialog tid = new TextInputDialog("new Character");
-                tid.setTitle("Choose character name");
+                TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW CHARACTER"));
+                tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE CHARACTER NAME"));
                 tid.setContentText(collision
-                        ? ("This name is already taken, please choose another name")
-                        : ("Please choose name of the character"));
+                        ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
+                        : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE CHARACTER")));
                 name = tid.showAndWait();
                 collision = true;   //pri dalsim pruchodu cyklem se zmeni text v dialogu
             } while (nameCollides(selectedGroup.getChildren(), name));
@@ -157,9 +171,9 @@ public class FXMLDocumentController {
             charInspectorTV.getSelectionModel().select(item);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Selection Error");
-            alert.setHeaderText("No Group selected!");
-            alert.setContentText("Please select group to which new Character can be added");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NO GROUP SELECTED!"));
+            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT GROUP TO WHICH NEW CHARACTER CAN BE ADDED"));
             alert.showAndWait();
         }
     }
@@ -170,11 +184,11 @@ public class FXMLDocumentController {
         Optional<String> name = Optional.empty();
         boolean collision = false;
         do {
-            TextInputDialog tid = new TextInputDialog("new Group");
-            tid.setTitle("Choose group name");
+            TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW GROUP"));
+            tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE GROUP NAME"));
             tid.setContentText(collision
-                    ? ("This name is already taken, please choose another name")
-                    : ("Please choose name of the group"));
+                    ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
+                    : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE GROUP")));
             name = tid.showAndWait();
             collision = true;
         } while (nameCollides(charInspectorTV.getRoot().getChildren(), name));
@@ -199,9 +213,9 @@ public class FXMLDocumentController {
     void load(ActionEvent event) {
         if (!charInspectorTV.getRoot().getChildren().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Possible data loss");
-            alert.setHeaderText("Current state might contain unsaved data");
-            alert.setContentText("Do you want to save your data now?");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("POSSIBLE DATA LOSS"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CURRENT STATE MIGHT CONTAIN UNSAVED DATA"));
+            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU WANT TO SAVE YOUR DATA NOW?"));
             alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.YES) {
@@ -223,12 +237,12 @@ public class FXMLDocumentController {
     }
 
     @FXML
-    void exit(ActionEvent event) {
+    public void exit(ActionEvent event) {
         if (!charInspectorTV.getRoot().getChildren().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Possible data loss");
-            alert.setHeaderText("Current state might contain unsaved data");
-            alert.setContentText("Do you want to save your data now?");
+            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("POSSIBLE DATA LOSS"));
+            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CURRENT STATE MIGHT CONTAIN UNSAVED DATA"));
+            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU WANT TO SAVE YOUR DATA NOW?"));
             alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.YES) {
@@ -244,17 +258,37 @@ public class FXMLDocumentController {
     @FXML
     void showAbout(ActionEvent event) {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
-        about.setContentText("");
-        about.setTitle("About DrD Editor");
-        about.setHeaderText("");
+        about.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ABOUT"));
+        about.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ABOUT DRD EDITOR"));
+        about.setHeaderText("DrD Editor");
         about.showAndWait();
     }
 
     @FXML
     void showGuide(ActionEvent event) {
-        // TODO 
+        //if (guide == null) {
+            guide = new Stage();
+            //guide.initOwner(window);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/Guide.fxml"), ResourceBundle.getBundle("drdeditor/Bundle", Locale.getDefault()));
+                Accordion root = (Accordion) loader.load();
+                Scene scene = new Scene(root, 200, 100);
+                guide.setMinHeight(500);
+                guide.setMinWidth(250);
+                guide.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DRD EDITOR - GUIDE"));
+                guide.setScene(scene);
+            } catch (IOException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        //}
+        guide.show();
     }
 
+    @FXML
+    private void changeLanguage(ActionEvent event) {
+        //Not implemented
+    }
+    
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert newCharacterMI != null : "fx:id=\"newMI\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
@@ -269,11 +303,11 @@ public class FXMLDocumentController {
         charInspectorTV.getRoot().setExpanded(true);
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Tabs.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/Tabs.fxml"), ResourceBundle.getBundle("drdeditor/Bundle", Locale.getDefault()));
             tabs = (TabPane) loader.load();
             ctrl = loader.getController();
         } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
         charInspectorTV.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends TreeItem<ITreeNode>> change) -> {
             updateCenter();
@@ -284,10 +318,10 @@ public class FXMLDocumentController {
     private void updateCenter() {
         TreeItem<ITreeNode> selected = charInspectorTV.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            pane.setCenter(new Label("Nothing here.\nPlease select group from list on left side\nor create your new group of characters from FILE-New Group."));
+            pane.setCenter(new Label(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NO GROUP SELECTED")));
         } else {
             if (selected.getParent() == charInspectorTV.getRoot()) {
-                pane.setCenter(new Label("Nothing here.\nPlease select character from list on left side\nor create new one from FILE-New Character."));
+                pane.setCenter(new Label(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NO CHARACTER SELECTED")));
             } else {
                 pane.setCenter(tabs);
                 ctrl.setCharacter((GameCharacter) selected.getValue());

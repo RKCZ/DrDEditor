@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Accordion id="Accordion" xmlns="http://javafx.com/javafx/8.0.111" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="drdeditor.controller.GuideController">
+    <panes>
+        <TitledPane text="%Editor help guide">
+            <content>
+                <TextArea editable="false" text="%EDITOR HELP" />
+            </content>
+        </TitledPane>
+        <TitledPane text="%Game guide">
+            <content>
+                <Accordion>
+                    <panes>
+                        <TitledPane text="%WARRIOR">
+                            <content>
+                                <TextArea editable="false" text="%WARRIOR HELP" />                        
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="%RANGER">
+                            <content>
+                                <TextArea editable="false" text="%RANGER HELP" />
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="%ALCHEMIST">
+                            <content>
+                                <TextArea editable="false" text="%ALCHEMIST HELP" />
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="%SORCERER">
+                            <content>
+                                <TextArea editable="false" text="%SORCERER HELP" />
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="%THIEF">
+                            <content>
+                                <TextArea editable="false" text="%THIEF HELP" />
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+            </content>   
+     </TitledPane>
+    </panes>
+</Accordion>
