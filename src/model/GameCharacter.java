@@ -25,11 +25,85 @@ public class GameCharacter implements ITreeNode {
     private final IntegerProperty maxMag = new SimpleIntegerProperty();
     private final ListProperty<Attribute> attributes = new SimpleListProperty<>(FXCollections.observableArrayList());
     private final IntegerProperty armor = new SimpleIntegerProperty();
+    private final ListProperty<String> spells = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final ListProperty<String> equipment = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final ListProperty<String> treasure = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final ListProperty<MeleeAttribute> meleeWeapons = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final ListProperty<RangedAttribute> rangedWeapons = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final StringProperty notes = new SimpleStringProperty();
 
-    public GameCharacter() {
-        initializeAttributes();
+    public String getNotes() {
+        return notes.get();
     }
 
+    public void setNotes(String value) {
+        notes.set(value);
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
+    }
+
+    public ObservableList getRangedWeapons() {
+        return rangedWeapons.get();
+    }
+
+    public void setRangedWeapons(ObservableList value) {
+        rangedWeapons.set(value);
+    }
+
+    public ListProperty rangedWeaponsProperty() {
+        return rangedWeapons;
+    }
+
+    public ObservableList getMeleeWeapons() {
+        return meleeWeapons.get();
+    }
+
+    public void setMeleeWeapons(ObservableList value) {
+        meleeWeapons.set(value);
+    }
+
+    public ListProperty meleeWeaponsProperty() {
+        return meleeWeapons;
+    }
+
+    public ObservableList getTreasure() {
+        return treasure.get();
+    }
+
+    public void setTreasure(ObservableList value) {
+        treasure.set(value);
+    }
+
+    public ListProperty treasureProperty() {
+        return treasure;
+    }
+
+    public ObservableList getEquipment() {
+        return equipment.get();
+    }
+
+    public void setEquipment(ObservableList value) {
+        equipment.set(value);
+    }
+
+    public ListProperty EquipmentProperty() {
+        return equipment;
+    }
+    
+    public ObservableList getSpells() {
+        return spells.get();
+    }
+
+    public void setSpells(ObservableList value) {
+        spells.set(value);
+    }
+
+    public ListProperty spellsProperty() {
+        return spells;
+    }
+   
     public int getArmor() {
         return armor.get();
     }
@@ -115,7 +189,7 @@ public class GameCharacter implements ITreeNode {
         return attributes;
     }
 
-    private void initializeAttributes() {
+    private void initialize() {
         Attribute strength = new Attribute();
         Attribute resistance = new Attribute();
         Attribute dexterity = new Attribute();
@@ -127,6 +201,18 @@ public class GameCharacter implements ITreeNode {
         intelligence.setName("intelligence");
         charisma.setName("charisma");
         getAttributes().addAll(strength, dexterity, resistance, intelligence, charisma);
+        
+        /*MeleeAttribute defWeapon = new MeleeAttribute();
+        defWeapon.setName("Default Melee Weapon");
+        getMeleeWeapons().add(defWeapon);
+        
+        RangedAttribute defRangedWeapon = new RangedAttribute();
+        defRangedWeapon.setName("Default Ranged Weapon");
+        getRangedWeapons().add(defRangedWeapon);
+        
+        getSpells().add("New Spell");
+        getEquipment().add("new Equipment");
+        getTreasure().add("new Treasure");*/
     }
 
     @Override
@@ -145,5 +231,8 @@ public class GameCharacter implements ITreeNode {
         sb.append(">");
         return sb.toString();
     }
-
+ 
+    public GameCharacter() {
+        initialize();        
+    }
 }

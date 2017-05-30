@@ -114,7 +114,7 @@ public class FXMLDocumentController {
                         : ("Please choose new name"));
                 name = tid.showAndWait();
                 collision = true;
-            } while (nameCollides(selected.getParent().getChildren(), name.get()));
+            } while (nameCollides(selected.getParent().getChildren(), name));
             selected.getValue().setName(name.get());
             ctrl.updateView();
         } else {
@@ -146,7 +146,7 @@ public class FXMLDocumentController {
                         : ("Please choose name of the character"));
                 name = tid.showAndWait();
                 collision = true;   //pri dalsim pruchodu cyklem se zmeni text v dialogu
-            } while (nameCollides(selectedGroup.getChildren(), name.get()));
+            } while (nameCollides(selectedGroup.getChildren(), name));
             newCharacter.setName(name.get());
             TreeItem<ITreeNode> item = new TreeItem<>(newCharacter);
             newCharacter.nameProperty().addListener(((observable, oldValue, newValue) -> {
@@ -177,17 +177,17 @@ public class FXMLDocumentController {
                     : ("Please choose name of the group"));
             name = tid.showAndWait();
             collision = true;
-        } while (nameCollides(charInspectorTV.getRoot().getChildren(), name.get()));
+        } while (nameCollides(charInspectorTV.getRoot().getChildren(), name));
         newGroup.setName(name.get());
         TreeItem<ITreeNode> node = new TreeItem<>(newGroup);
         charInspectorTV.getRoot().getChildren().add(node);
         charInspectorTV.getSelectionModel().select(node);
     }
 
-    private boolean nameCollides(ObservableList<TreeItem<ITreeNode>> children, String newName) {
+    private boolean nameCollides(ObservableList<TreeItem<ITreeNode>> children, Optional<String> newName) {
         return children.stream()
                 .map(item -> (item.getValue()).getName())
-                .anyMatch(value -> value.equalsIgnoreCase(newName));
+                .anyMatch(value -> value.equalsIgnoreCase(newName.orElse("")));
     }
 
     @FXML
@@ -252,7 +252,7 @@ public class FXMLDocumentController {
 
     @FXML
     void showGuide(ActionEvent event) {
-
+        // TODO 
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -300,5 +300,4 @@ public class FXMLDocumentController {
     public void setWindow(Window window) {
         this.window = window;
     }
-
 }

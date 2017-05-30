@@ -25,7 +25,7 @@ public class DrdEditor extends Application {
         Scene scene = new Scene(root);
 
         stage.setMinHeight(600);
-        stage.setMinWidth(800);
+        stage.setMinWidth(1000);
         stage.setTitle("DrD Editor");
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> { 
@@ -42,5 +42,4 @@ public class DrdEditor extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

@@ -5,9 +5,12 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TabPane;
@@ -21,8 +24,10 @@ import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import model.Attribute;
 import model.GameCharacter;
+import model.MeleeAttribute;
 import model.Occupation;
 import model.Race;
+import model.RangedAttribute;
 
 /**
  *
@@ -56,7 +61,7 @@ public class TabsController {
     private ChoiceBox<Occupation> classCB; // Value injected by FXMLLoader
 
     @FXML // fx:id="statsTV"
-    private TableView<?> statsTV; // Value injected by FXMLLoader
+    private TableView<Attribute> statsTV; // Value injected by FXMLLoader
 
     @FXML // fx:id="maxMagSpnr"
     private Spinner<Integer> maxMagSpnr; // Value injected by FXMLLoader
@@ -71,19 +76,19 @@ public class TabsController {
     private ListView<String> spellLV; // Value injected by FXMLLoader
 
     @FXML // fx:id="meleeTV"
-    private TableView<?> meleeTV; // Value injected by FXMLLoader
+    private TableView<MeleeAttribute> meleeTV; // Value injected by FXMLLoader
 
     @FXML // fx:id="rangedTV"
-    private TableView<?> rangedTV; // Value injected by FXMLLoader
+    private TableView<RangedAttribute> rangedTV; // Value injected by FXMLLoader
 
     @FXML // fx:id="notesTA"
     private TextArea notesTA; // Value injected by FXMLLoader
 
     @FXML // fx:id="equipmentLV"
-    private ListView<?> equipmentLV; // Value injected by FXMLLoader
+    private ListView<String> equipmentLV; // Value injected by FXMLLoader
 
     @FXML // fx:id="treasureLV"
-    private ListView<?> treasureLV; // Value injected by FXMLLoader
+    private ListView<String> treasureLV; // Value injected by FXMLLoader
 
     @FXML
     private TableColumn<Attribute, String> attrTC;
@@ -96,6 +101,113 @@ public class TabsController {
 
     @FXML
     private TabPane tabs;
+
+    @FXML
+    private Button editNoteBT;
+
+    @FXML
+    private TableColumn<MeleeAttribute, Integer> meleeWeaponAttrTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> rangedWeaponAttrTC;
+
+    @FXML
+    private TableColumn<MeleeAttribute, Integer> meleePowerTC;
+
+    @FXML
+    private TableColumn<MeleeAttribute, Integer> meleeDamageTC;
+
+    @FXML
+    private TableColumn<MeleeAttribute, Integer> defBonusTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> rangedPowerTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> rangedDamageTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> rangeTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> shortTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> mediumTC;
+
+    @FXML
+    private TableColumn<RangedAttribute, Integer> longTC;
+
+    @FXML
+    private void addSpell(ActionEvent event) {
+        spellLV.getItems().add("new Spell");
+    }
+
+    @FXML
+    private void addMeleeWeapon(ActionEvent event) {
+        final MeleeAttribute ma = new MeleeAttribute();
+        ma.setName("new Melee Weapon");
+        meleeTV.getItems().add(ma);
+    }
+
+    @FXML
+    private void addRangedWeapon(ActionEvent event) {
+        final RangedAttribute ra = new RangedAttribute();
+        ra.setName("new Ranged Weapon");
+        rangedTV.getItems().add(ra);
+    }
+
+    @FXML
+    private void removeSpell(ActionEvent event) {
+        spellLV.getItems().removeAll(spellLV.getSelectionModel().getSelectedItems());
+        spellLV.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void removeMeleeWeapon(ActionEvent event) {
+        meleeTV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        meleeTV.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void removeRangedWeapon(ActionEvent event) {
+        rangedTV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        rangedTV.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void editNote(ActionEvent event) {
+        if (editNoteBT.getText().equals("Edit")) {
+            notesTA.setEditable(true);
+            editNoteBT.setText("Save");
+        } else {
+            character.setNotes(notesTA.getText());
+            notesTA.setEditable(false);
+            editNoteBT.setText("Edit");
+        }
+    }
+
+    @FXML
+    private void addEquipment(ActionEvent event) {
+        equipmentLV.getItems().add("new Equipment");
+    }
+
+    @FXML
+    private void addTreasure(ActionEvent event) {
+        treasureLV.getItems().add("new Treasure");
+    }
+
+    @FXML
+    private void removeEquipment(ActionEvent event) {
+        equipmentLV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        equipmentLV.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void removeTreasure(ActionEvent event) {
+        treasureLV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        treasureLV.getSelectionModel().clearSelection();
+    }
 
     private <T> void commitEditorText(Spinner<T> spinner) {
         if (!spinner.isEditable()) {
@@ -166,26 +278,30 @@ public class TabsController {
             character.setArmor(ArmorSpnr.getValueFactory().getValue());
             System.out.println("changed to " + character.getArmor());
         }));
+
+        spellLV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        meleeTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        rangedTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        equipmentLV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        treasureLV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
-    //prepsat do fxml 
 
     private void initializeTabs() {
-        //raceCB.setItems(FXCollections.observableArrayList(Race.HUMAN, Race.ELF, Race.BARBAR, Race.DWARF, Race.HOBBIT, Race.KROLL, Race.KUDUK));
-        // classCB.setItems(FXCollections.observableArrayList(Occupation.ALCHEMIST, Occupation.RANGER, Occupation.SORCERER, Occupation.THIEF, Occupation.WARRIOR));
-        //maxMagSpnr.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 500, 0, 1));    
         maxMagSpnr.getValueFactory().setConverter(new IntegerStringConverter());
         maxMagSpnr.getEditor().setTextFormatter(getTextFormatter());
-        //maxHPSpnr.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 500, 0, 1));
         maxHPSpnr.getValueFactory().setConverter(new IntegerStringConverter());
         maxHPSpnr.getEditor().setTextFormatter(getTextFormatter());
-        //ArmorSpnr.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 0, 1));
         ArmorSpnr.getValueFactory().setConverter(new IntegerStringConverter());
         ArmorSpnr.getEditor().setTextFormatter(getTextFormatter());
-
-        //attrTC.setCellValueFactory(new PropertyValueFactory<>("name"));
-        //levelTC.setCellValueFactory(new PropertyValueFactory<>("level"));
+        meleePowerTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        meleeDamageTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        defBonusTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        rangedPowerTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        rangedDamageTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        shortTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        mediumTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
+        longTC.setCellFactory(TextFieldTableCell.forTableColumn(getIntegerConverter()));
         levelTC.setCellFactory(TextFieldTableCell.forTableColumn(getLevelConvertor()));
-
         correctionTC.setCellValueFactory(value -> new IntegerBinding() {
             {
                 super.bind(value.getValue().levelProperty());
@@ -231,6 +347,29 @@ public class TabsController {
                 }
             }
         });
+
+    }
+
+    private StringConverter<Integer> getIntegerConverter() {
+        return new StringConverter<Integer>() {
+            @Override
+            public String toString(Integer object) {
+                if (object == null) {
+                    return "";
+                }
+                return object.toString();
+            }
+
+            @Override
+            public Integer fromString(String string) {
+                try {
+                    int c = Integer.parseInt(string);
+                    return c;
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            }
+        };
     }
 
     private StringConverter<Integer> getLevelConvertor() {
@@ -269,6 +408,12 @@ public class TabsController {
         maxMagSpnr.getValueFactory().setValue(character.getMaxMag());
         maxHPSpnr.getValueFactory().setValue(character.getMaxHP());
         ArmorSpnr.getValueFactory().setValue(character.getArmor());
+        spellLV.setItems(character.getSpells());
+        meleeTV.setItems(character.getMeleeWeapons());
+        rangedTV.setItems(character.getRangedWeapons());
+        notesTA.setText(character.getNotes());
+        equipmentLV.setItems(character.getEquipment());
+        treasureLV.setItems(character.getTreasure());
     }
 
     private TextFormatter<String> getTextFormatter() {

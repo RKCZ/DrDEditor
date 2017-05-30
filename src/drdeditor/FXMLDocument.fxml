@@ -15,21 +15,21 @@
             <menus>
                 <Menu mnemonicParsing="true" text="_File">
                     <items>
-                        <MenuItem fx:id="newCharacterMI" onAction="#addCharacter" text="_New Character" />
-                        <MenuItem fx:id="newGroupMI" onAction="#addGroup" text="Ne_w Group" />
-                        <MenuItem fx:id="saveMI" onAction="#save" text="_Save" />
-                        <MenuItem fx:id="loadMI" onAction="#load" text="_Open" />
-                        <MenuItem fx:id="closeMI" onAction="#exit" text="Clo_se" />
+                        <MenuItem onAction="#addCharacter" text="_New Character" />
+                        <MenuItem onAction="#addGroup" text="Ne_w Group" />
+                        <MenuItem onAction="#save" text="_Save" />
+                        <MenuItem onAction="#load" text="_Open" />
+                        <MenuItem onAction="#exit" text="Clos_e" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="true" text="E_dit">
-                    <MenuItem onAction="#deleteSelection" text="_Delete selection" />
+                    <MenuItem onAction="#deleteSelection" text="Delete sele_ction" />
                     <MenuItem onAction="#renameSelection" text="_Rename selection" />
                 </Menu>
                 <Menu mnemonicParsing="true" text="Hel_p">
                     <items>
                         <MenuItem fx:id="guideMI" onAction="#showGuide" text="Gu_ide" />
-                        <MenuItem fx:id="aboutMI" onAction="#showAbout" text="Ab_out" />
+                        <MenuItem fx:id="aboutMI" onAction="#showAbout" text="_About" />
                     </items>
                 </Menu>
             </menus>
