@@ -171,18 +171,20 @@ public class TabsController {
 
     @FXML
     private void removeRangedWeapon(ActionEvent event) {
-        rangedTV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        rangedTV.getItems().removeAll(rangedTV.getSelectionModel().getSelectedItems());
         rangedTV.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void editNote(ActionEvent event) {
         if (editNoteBT.getText().equals(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"))) {
+            notesTA.setDisable(false);
             notesTA.setEditable(true);
             editNoteBT.setText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SAVE"));
         } else {
             character.setNotes(notesTA.getText());
             notesTA.setEditable(false);
+            notesTA.setDisable(true);
             editNoteBT.setText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"));
         }
     }
@@ -199,13 +201,13 @@ public class TabsController {
 
     @FXML
     private void removeEquipment(ActionEvent event) {
-        equipmentLV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        equipmentLV.getItems().removeAll(equipmentLV.getSelectionModel().getSelectedItems());
         equipmentLV.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void removeTreasure(ActionEvent event) {
-        treasureLV.getItems().removeAll(meleeTV.getSelectionModel().getSelectedItems());
+        treasureLV.getItems().removeAll(treasureLV.getSelectionModel().getSelectedItems());
         treasureLV.getSelectionModel().clearSelection();
     }
 

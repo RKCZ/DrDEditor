@@ -206,7 +206,7 @@ public class GameCharacter implements ITreeNode {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(100);
-        sb.append(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NAME: ")).append(getName());
+        sb.append(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NAME:")).append(getName());
         sb.append("\nRace: ").append(getRace());
         sb.append("\nOccupation: ").append(getOccupation());
         sb.append("\nMaximal Mags: ").append(getMaxMag());
