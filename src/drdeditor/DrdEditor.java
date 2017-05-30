@@ -15,12 +15,17 @@ import javafx.stage.Stage;
  */
 public class DrdEditor extends Application {
 
+    private Locale currentLocale;
+    private MainController controller;
+
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/Main.fxml"), ResourceBundle.getBundle("drdeditor/Bundle", Locale.getDefault()));
+        currentLocale = Locale.getDefault();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/Main.fxml"), ResourceBundle.getBundle("drdeditor/Bundle", currentLocale));
         Parent root = (Parent) loader.load();
         controller = (MainController) loader.getController();
         controller.setWindow(stage);
+        controller.setLocale(currentLocale);
         Scene scene = new Scene(root);
 
         stage.setMinHeight(600);
@@ -33,7 +38,6 @@ public class DrdEditor extends Application {
                 });
         stage.show();
     }
-    private MainController controller;
     
     /**
      * @param args the command line arguments

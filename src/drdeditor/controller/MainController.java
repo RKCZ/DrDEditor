@@ -3,6 +3,7 @@ package drdeditor.controller;
 /**
  * Sample Skeleton for 'FXMLDocument.fxml' Controller Class
  */
+import drdeditor.DrdEditor;
 import drdeditor.FileHandler;
 import java.io.IOException;
 import java.net.URL;
@@ -40,11 +41,13 @@ import model.ITreeNode;
 
 public class MainController {
 
+    private DrdEditor mainApp;
     private Stage guide;
     private Window window;
     private TabsController ctrl;
     private TabPane tabs;
     private final FileHandler fh = new FileHandler(window);
+    private Locale locale;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -77,8 +80,8 @@ public class MainController {
     ToggleGroup languageTG;
     
     @FXML
-    RadioMenuItem czRMI;
-
+    RadioMenuItem czRMI;   
+    
     @FXML
     void deleteSelection(ActionEvent event) {
         TreeItem<ITreeNode> selected = charInspectorTV.getSelectionModel()
@@ -123,6 +126,7 @@ public class MainController {
             do {
                 TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW NAME"));
                 tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE NEW NAME"));
+                tid.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CONFIRMATION"));
                 tid.setContentText(collision
                         ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
                         : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NEW NAME")));
@@ -155,6 +159,7 @@ public class MainController {
             do {
                 TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW CHARACTER"));
                 tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE CHARACTER NAME"));
+                tid.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CONFIRMATION"));
                 tid.setContentText(collision
                         ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
                         : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE CHARACTER")));
@@ -186,6 +191,7 @@ public class MainController {
         do {
             TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW GROUP"));
             tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE GROUP NAME"));
+            tid.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CONFIRMATION"));
             tid.setContentText(collision
                     ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
                     : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE GROUP")));
@@ -266,9 +272,9 @@ public class MainController {
 
     @FXML
     void showGuide(ActionEvent event) {
-        //if (guide == null) {
+        if (guide == null) {
             guide = new Stage();
-            //guide.initOwner(window);
+            guide.initOwner(window);
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/drdeditor/Guide.fxml"), ResourceBundle.getBundle("drdeditor/Bundle", Locale.getDefault()));
                 Accordion root = (Accordion) loader.load();
@@ -280,13 +286,15 @@ public class MainController {
             } catch (IOException ex) {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        //}
+        }
         guide.show();
     }
 
     @FXML
     private void changeLanguage(ActionEvent event) {
-        //Not implemented
+        if (event.getSource().equals(czRMI)) {
+            
+        }
     }
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -333,5 +341,9 @@ public class MainController {
 
     public void setWindow(Window window) {
         this.window = window;
+    }
+    
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }
