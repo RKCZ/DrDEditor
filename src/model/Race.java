@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ResourceBundle;
+
 /**
  *
  * @author Roman Kalivoda
@@ -39,20 +41,20 @@ public enum Race {
     public String toString() {
         switch (this) {
             case HUMAN:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("HUMAN");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("HUMAN");
             case ELF:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ELF");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("ELF");
             case DWARF:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DWARF");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("DWARF");
             case KUDUK:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("KUDUK");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("KUDUK");
             case HOBBIT:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("HOBBIT");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("HOBBIT");
             case BARBAR:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("BARBAR");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("BARBAR");
             case KROLL:
-                return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("KROLL");
+                return ResourceBundle.getBundle("drdeditor/Bundle").getString("KROLL");
         }
-        return java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("UNDEFINED");
+        return ResourceBundle.getBundle("drdeditor/Bundle").getString("UNDEFINED");
     }
 }

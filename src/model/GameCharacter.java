@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ResourceBundle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -195,18 +196,18 @@ public class GameCharacter implements ITreeNode {
         Attribute dexterity = new Attribute();
         Attribute intelligence = new Attribute();
         Attribute charisma = new Attribute();
-        strength.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("STRENGTH"));
-        resistance.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("RESISTANCE"));
-        dexterity.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DEXTERITY"));
-        intelligence.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("INTELLIGENCE"));
-        charisma.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHARISMA"));
+        strength.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("STRENGTH"));
+        resistance.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("RESISTANCE"));
+        dexterity.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("DEXTERITY"));
+        intelligence.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("INTELLIGENCE"));
+        charisma.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("CHARISMA"));
         getAttributes().addAll(strength, dexterity, resistance, intelligence, charisma);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(100);
-        sb.append(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NAME:")).append(getName());
+        sb.append(ResourceBundle.getBundle("drdeditor/Bundle").getString("NAME:")).append(getName());
         sb.append("\nRace: ").append(getRace());
         sb.append("\nOccupation: ").append(getOccupation());
         sb.append("\nMaximal Mags: ").append(getMaxMag());

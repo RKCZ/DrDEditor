@@ -6,17 +6,17 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
@@ -49,20 +49,20 @@ public class FileHandler {
     }
 
     public GameCharacter readCharacter(String data) {
-        InputStream is = new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8));
+        InputStream is = new ByteArrayInputStream(data.getBytes());
         XMLDecoder xmld = new XMLDecoder(is);
         GameCharacter character = (GameCharacter) xmld.readObject();
         return character;
     }
 
     public void saveData(TreeItem<ITreeNode> data) {
-        FileOutputStream fos = null;
         try {
             FileChooser fc = new FileChooser();
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("DrD file", "*.DrD"));
             fc.setInitialFileName(data.getValue().getName());
             final File saveFile = fc.showSaveDialog(window);
-            fos = new FileOutputStream(saveFile);
+            FileOutputStream fos = new FileOutputStream(saveFile);
+            //ZipOutputStream zos = new ZipOutputStream(fos, Charset.forName("IBM852"));
             ZipOutputStream zos = new ZipOutputStream(fos);
             zos.setLevel(ZipOutputStream.STORED);
             data.getChildren().stream()
@@ -85,21 +85,19 @@ public class FileHandler {
                                     }
                                 });
                     });
-        } catch (FileNotFoundException ex) {
+            fos.flush();            
+            zos.flush();
+            zos.close();
+            fos.close();
+        } catch (IOException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("FILE ERROR"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHARACTER WAS NOT SAVED!"));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("FILE ERROR"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CHARACTER WAS NOT SAVED!"));
             alert.show();
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
-            System.out.println(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA WRITING OPERATION CANCELLED"));
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException | NullPointerException ex) {
-                Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+            System.out.println(ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA WRITING OPERATION CANCELLED"));
+        } 
     }
 
     public TreeItem<ITreeNode> readData() {
@@ -109,11 +107,12 @@ public class FileHandler {
         try {
             FileChooser fc = new FileChooser();
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("DrD file", "*.DrD"));
-            final File file = fc.showOpenDialog(window);
+            File file = fc.showOpenDialog(window);
             fis = new FileInputStream(file);
             Group root = new Group();
             root.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
             data = new TreeItem<>(root);
+            //zis = new ZipInputStream(fis, Charset.forName("IBM852"));
             zis = new ZipInputStream(fis);
             ZipEntry entry;
             TreeItem<ITreeNode> groupItem = null;
@@ -144,17 +143,17 @@ public class FileHandler {
             }
         } catch (IOException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("FILE ERROR"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA WERE NOT LOADED!"));
-            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ERROR OCCURRED WHILE READING."));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("FILE ERROR"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA WERE NOT LOADED!"));
+            alert.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("ERROR OCCURRED WHILE READING."));
             alert.show();
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException ex) {
-            System.out.println(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA READING OPERATION CANCELLED"));
+            System.out.println(ResourceBundle.getBundle("drdeditor/Bundle").getString("DATA READING OPERATION CANCELLED"));
         } finally {
             try {
-                fis.close();
                 zis.close();
+                fis.close();                
             } catch (IOException | NullPointerException ex) {
                 Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
             }

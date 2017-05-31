@@ -1,6 +1,7 @@
 package drdeditor.controller;
 
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 import javafx.beans.binding.IntegerBinding;
@@ -9,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Spinner;
@@ -17,7 +19,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
@@ -51,8 +52,8 @@ public class TabsController {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="nameTF"
-    private TextField nameTF; // Value injected by FXMLLoader
+    @FXML // fx:id="nameLB"
+    private Label nameLB; // Value injected by FXMLLoader
 
     @FXML // fx:id="raceCB"
     private ChoiceBox<Race> raceCB; // Value injected by FXMLLoader
@@ -81,8 +82,8 @@ public class TabsController {
     @FXML // fx:id="rangedTV"
     private TableView<RangedAttribute> rangedTV; // Value injected by FXMLLoader
 
-    @FXML // fx:id="notesTA"
-    private TextArea notesTA; // Value injected by FXMLLoader
+    @FXML // fx:id="notes"
+    private TextArea notes; // Value injected by FXMLLoader
 
     @FXML // fx:id="equipmentLV"
     private ListView<String> equipmentLV; // Value injected by FXMLLoader
@@ -140,20 +141,20 @@ public class TabsController {
 
     @FXML
     private void addSpell(ActionEvent event) {
-        spellLV.getItems().add(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW SPELL"));
+        spellLV.getItems().add(MessageFormat.format(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW SPELL"), new Object[] {spellLV.getItems().size()+1}));
     }
 
     @FXML
     private void addMeleeWeapon(ActionEvent event) {
         final MeleeAttribute ma = new MeleeAttribute();
-        ma.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW MELEE WEAPON"));
+        ma.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW MELEE WEAPON"));
         meleeTV.getItems().add(ma);
     }
 
     @FXML
     private void addRangedWeapon(ActionEvent event) {
         final RangedAttribute ra = new RangedAttribute();
-        ra.setName(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW RANGED WEAPON"));
+        ra.setName(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW RANGED WEAPON"));
         rangedTV.getItems().add(ra);
     }
 
@@ -177,26 +178,24 @@ public class TabsController {
 
     @FXML
     private void editNote(ActionEvent event) {
-        if (editNoteBT.getText().equals(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"))) {
-            notesTA.setDisable(false);
-            notesTA.setEditable(true);
-            editNoteBT.setText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SAVE"));
+        if (editNoteBT.getText().equals(ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"))) {
+            notes.setEditable(true);
+            editNoteBT.setText(ResourceBundle.getBundle("drdeditor/Bundle").getString("SAVE"));
         } else {
-            character.setNotes(notesTA.getText());
-            notesTA.setEditable(false);
-            notesTA.setDisable(true);
-            editNoteBT.setText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"));
+            character.setNotes(notes.getText());
+            notes.setEditable(false);
+            editNoteBT.setText(ResourceBundle.getBundle("drdeditor/Bundle").getString("EDIT"));
         }
     }
 
     @FXML
     private void addEquipment(ActionEvent event) {
-        equipmentLV.getItems().add(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW EQUIPMENT"));
+        equipmentLV.getItems().add(MessageFormat.format(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW EQUIPMENT"), new Object[] {equipmentLV.getItems().size()+1}));
     }
 
     @FXML
     private void addTreasure(ActionEvent event) {
-        treasureLV.getItems().add(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW TREASURE"));
+        treasureLV.getItems().add(MessageFormat.format(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW TREASURE"), new Object[] {treasureLV.getItems().size()+1}));
     }
 
     @FXML
@@ -228,7 +227,6 @@ public class TabsController {
 
     @FXML
     void initialize() {
-        assert nameTF != null : "fx:id=\"nameTF\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert raceCB != null : "fx:id=\"raceCB\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert classCB != null : "fx:id=\"classCB\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert statsTV != null : "fx:id=\"statsTV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
@@ -238,7 +236,7 @@ public class TabsController {
         assert spellLV != null : "fx:id=\"spellLV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert meleeTV != null : "fx:id=\"meleeTV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert rangedTV != null : "fx:id=\"rangedTV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
-        assert notesTA != null : "fx:id=\"notesTA\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
+        assert notes != null : "fx:id=\"notes\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert equipmentLV != null : "fx:id=\"equipmentLV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
         assert treasureLV != null : "fx:id=\"treasureLV\" was not injected: check your FXML file 'FXMLDocument.fxml'.";
 
@@ -286,6 +284,21 @@ public class TabsController {
         rangedTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         equipmentLV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treasureLV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+        spellLV.setOnEditCommit(event -> {
+            if(!spellLV.getItems().contains(event.getNewValue()))
+                spellLV.getItems().set(event.getIndex(), event.getNewValue());
+        });
+        
+         equipmentLV.setOnEditCommit(event -> {
+            if(!equipmentLV.getItems().contains(event.getNewValue()))
+                equipmentLV.getItems().set(event.getIndex(), event.getNewValue());
+        });
+         
+          treasureLV.setOnEditCommit(event -> {
+            if(!treasureLV.getItems().contains(event.getNewValue()))
+                treasureLV.getItems().set(event.getIndex(), event.getNewValue());
+        });
     }
 
     private void initializeTabs() {
@@ -404,7 +417,7 @@ public class TabsController {
 
     public void updateView() {
         statsTV.setItems(character.getAttributes());
-        nameTF.setText(character.getName());
+        nameLB.setText(character.getName());
         raceCB.setValue(character.getRace());
         classCB.setValue(character.getOccupation());
         maxMagSpnr.getValueFactory().setValue(character.getMaxMag());
@@ -413,7 +426,7 @@ public class TabsController {
         spellLV.setItems(character.getSpells());
         meleeTV.setItems(character.getMeleeWeapons());
         rangedTV.setItems(character.getRangedWeapons());
-        notesTA.setText(character.getNotes());
+        notes.setText(character.getNotes());
         equipmentLV.setItems(character.getEquipment());
         treasureLV.setItems(character.getTreasure());
     }

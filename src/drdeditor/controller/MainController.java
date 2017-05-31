@@ -89,8 +89,8 @@ public class MainController {
         if (selected != null) {
             if (selected.getParent() == charInspectorTV.getRoot()) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DELETING"));
-                alert.setHeaderText(java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU REALLY WANT TO DELETE {0} AND ALL HEROES WITHIN?"), new Object[] {selected.getValue().getName()}));
+                alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("DELETING"));
+                alert.setHeaderText(java.text.MessageFormat.format(ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU REALLY WANT TO DELETE {0} AND ALL HEROES WITHIN?"), new Object[] {selected.getValue().getName()}));
                 alert.showAndWait()
                         .filter(response -> response == ButtonType.OK)
                         .ifPresent(response -> {
@@ -99,8 +99,8 @@ public class MainController {
             } else {
                 TreeItem<ITreeNode> group = selected.getParent();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DELETING"));
-                alert.setHeaderText(java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU REALLY WANT TO DELETE {0}?"), new Object[] {selected.getValue().getName()}));
+                alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("DELETING"));
+                alert.setHeaderText(java.text.MessageFormat.format(ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU REALLY WANT TO DELETE {0}?"), new Object[] {selected.getValue().getName()}));
                 alert.showAndWait()
                         .filter(response -> response == ButtonType.OK)
                         .ifPresent(response -> {
@@ -109,9 +109,9 @@ public class MainController {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NOTHING SELECTED!"));
-            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT WHICH HERO YOU WANT TO KILL FIRST"));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("NOTHING SELECTED!"));
+            alert.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT WHICH HERO YOU WANT TO KILL FIRST"));
             alert.showAndWait();
         }
     }
@@ -124,22 +124,22 @@ public class MainController {
             Optional<String> name = Optional.empty();
             boolean collision = false;
             do {
-                TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW NAME"));
-                tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE NEW NAME"));
+                TextInputDialog tid = new TextInputDialog(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW NAME"));
+                tid.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE NEW NAME"));
                 tid.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CONFIRMATION"));
                 tid.setContentText(collision
-                        ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
-                        : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NEW NAME")));
+                        ? (ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
+                        : (ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NEW NAME")));
                 name = tid.showAndWait();
                 collision = true;
-            } while (nameCollides(selected.getParent().getChildren(), name));
+            } while (isNotValid(selected.getParent().getChildren(), name));
             selected.getValue().setName(name.get());
             ctrl.updateView();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NOTHING SELECTED!"));
-            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT WHICH HERO OR GROUP YOU WANT TO RENAME FIRST"));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("NOTHING SELECTED!"));
+            alert.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT WHICH HERO OR GROUP YOU WANT TO RENAME FIRST"));
             alert.showAndWait();
         }
     }
@@ -157,15 +157,15 @@ public class MainController {
             Optional<String> name = Optional.empty();
             boolean collision = false;
             do {
-                TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW CHARACTER"));
-                tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE CHARACTER NAME"));
+                TextInputDialog tid = new TextInputDialog(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW CHARACTER"));
+                tid.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE CHARACTER NAME"));
                 tid.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CONFIRMATION"));
                 tid.setContentText(collision
-                        ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
-                        : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE CHARACTER")));
+                        ? (ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
+                        : (ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE CHARACTER")));
                 name = tid.showAndWait();
                 collision = true;   //pri dalsim pruchodu cyklem se zmeni text v dialogu
-            } while (nameCollides(selectedGroup.getChildren(), name));
+            } while (isNotValid(selectedGroup.getChildren(), name));
             newCharacter.setName(name.get());
             TreeItem<ITreeNode> item = new TreeItem<>(newCharacter);
             newCharacter.nameProperty().addListener(((observable, oldValue, newValue) -> {
@@ -176,9 +176,9 @@ public class MainController {
             charInspectorTV.getSelectionModel().select(item);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NO GROUP SELECTED!"));
-            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT GROUP TO WHICH NEW CHARACTER CAN BE ADDED"));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("SELECTION ERROR"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("NO GROUP SELECTED!"));
+            alert.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE SELECT GROUP TO WHICH NEW CHARACTER CAN BE ADDED"));
             alert.showAndWait();
         }
     }
@@ -189,25 +189,34 @@ public class MainController {
         Optional<String> name = Optional.empty();
         boolean collision = false;
         do {
-            TextInputDialog tid = new TextInputDialog(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW GROUP"));
-            tid.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE GROUP NAME"));
+            TextInputDialog tid = new TextInputDialog(ResourceBundle.getBundle("drdeditor/Bundle").getString("NEW GROUP"));
+            tid.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("CHOOSE GROUP NAME"));
             tid.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CONFIRMATION"));
             tid.setContentText(collision
-                    ? (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
-                    : (java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE GROUP")));
+                    ? (ResourceBundle.getBundle("drdeditor/Bundle").getString("THIS NAME IS ALREADY TAKEN, PLEASE CHOOSE ANOTHER NAME"))
+                    : (ResourceBundle.getBundle("drdeditor/Bundle").getString("PLEASE CHOOSE NAME OF THE GROUP")));
             name = tid.showAndWait();
             collision = true;
-        } while (nameCollides(charInspectorTV.getRoot().getChildren(), name));
+        } while (isNotValid(charInspectorTV.getRoot().getChildren(), name));
         newGroup.setName(name.get());
         TreeItem<ITreeNode> node = new TreeItem<>(newGroup);
+        newGroup.nameProperty().addListener(((observable, oldValue, newValue) -> {
+                TreeModificationEvent<ITreeNode> treeEvent = new TreeItem.TreeModificationEvent<>(TreeItem.valueChangedEvent(), node);
+                Event.fireEvent(node, treeEvent);
+            }));
         charInspectorTV.getRoot().getChildren().add(node);
         charInspectorTV.getSelectionModel().select(node);
     }
 
-    private boolean nameCollides(ObservableList<TreeItem<ITreeNode>> children, Optional<String> newName) {
-        return children.stream()
+    private boolean isNotValid(ObservableList<TreeItem<ITreeNode>> children, Optional<String> newName) {
+        if(newName.isPresent()) {
+            if (newName.get().equals(""))
+                return true;
+            return children.stream()
                 .map(item -> (item.getValue()).getName())
-                .anyMatch(value -> value.equalsIgnoreCase(newName.orElse("")));
+                .anyMatch(value -> value.equalsIgnoreCase(newName.get()));
+        }
+        return false;
     }
 
     @FXML
@@ -219,9 +228,9 @@ public class MainController {
     void load(ActionEvent event) {
         if (!charInspectorTV.getRoot().getChildren().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("POSSIBLE DATA LOSS"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CURRENT STATE MIGHT CONTAIN UNSAVED DATA"));
-            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU WANT TO SAVE YOUR DATA NOW?"));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("POSSIBLE DATA LOSS"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CURRENT STATE MIGHT CONTAIN UNSAVED DATA"));
+            alert.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU WANT TO SAVE YOUR DATA NOW?"));
             alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.YES) {
@@ -246,9 +255,9 @@ public class MainController {
     public void exit(ActionEvent event) {
         if (!charInspectorTV.getRoot().getChildren().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("POSSIBLE DATA LOSS"));
-            alert.setHeaderText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("CURRENT STATE MIGHT CONTAIN UNSAVED DATA"));
-            alert.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU WANT TO SAVE YOUR DATA NOW?"));
+            alert.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("POSSIBLE DATA LOSS"));
+            alert.setHeaderText(ResourceBundle.getBundle("drdeditor/Bundle").getString("CURRENT STATE MIGHT CONTAIN UNSAVED DATA"));
+            alert.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("DO YOU WANT TO SAVE YOUR DATA NOW?"));
             alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.YES) {
@@ -264,8 +273,8 @@ public class MainController {
     @FXML
     void showAbout(ActionEvent event) {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
-        about.setContentText(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ABOUT"));
-        about.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("ABOUT DRD EDITOR"));
+        about.setContentText(ResourceBundle.getBundle("drdeditor/Bundle").getString("ABOUT"));
+        about.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("ABOUT DRD EDITOR"));
         about.setHeaderText("DrD Editor");
         about.showAndWait();
     }
@@ -281,7 +290,7 @@ public class MainController {
                 Scene scene = new Scene(root, 200, 100);
                 guide.setMinHeight(500);
                 guide.setMinWidth(250);
-                guide.setTitle(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("DRD EDITOR - GUIDE"));
+                guide.setTitle(ResourceBundle.getBundle("drdeditor/Bundle").getString("DRD EDITOR - GUIDE"));
                 guide.setScene(scene);
             } catch (IOException ex) {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
@@ -326,10 +335,10 @@ public class MainController {
     private void updateCenter() {
         TreeItem<ITreeNode> selected = charInspectorTV.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            pane.setCenter(new Label(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NO GROUP SELECTED")));
+            pane.setCenter(new Label(ResourceBundle.getBundle("drdeditor/Bundle").getString("NO GROUP SELECTED")));
         } else {
             if (selected.getParent() == charInspectorTV.getRoot()) {
-                pane.setCenter(new Label(java.util.ResourceBundle.getBundle("drdeditor/Bundle").getString("NO CHARACTER SELECTED")));
+                pane.setCenter(new Label(ResourceBundle.getBundle("drdeditor/Bundle").getString("NO CHARACTER SELECTED")));
             } else {
                 pane.setCenter(tabs);
                 ctrl.setCharacter((GameCharacter) selected.getValue());
