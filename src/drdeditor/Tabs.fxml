@@ -97,7 +97,7 @@
                         </Spinner>
                         <Spinner fx:id="ArmorSpnr" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="7" >
                             <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="12" initialValue="0" amountToStepBy="1" />
+                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="-12" max="12" initialValue="0" amountToStepBy="1" />
                             </valueFactory>
                         </Spinner>
                     </children>
